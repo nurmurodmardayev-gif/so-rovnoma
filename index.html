@@ -815,8 +815,8 @@
       </div>
       <div class="options" id="opts-${q.id}">
         ${q.options.map((opt, i) => `
-          <label class="option" id="opt-${q.id}-${i}" onclick="selectOption(${q.id}, ${i}, ${isCheckbox})">
-            <input type="${q.type}" name="q${q.id}" value="${i}">
+          <label class="option" id="opt-${q.id}-${i}" onclick="selectOption(event, ${q.id}, ${i}, ${isCheckbox})">
+            <input type="${q.type}" name="q${q.id}" value="${i}" style="display:none">
             <div class="${isCheckbox ? 'check-box' : 'radio-dot'}">${isCheckbox ? '✓' : ''}</div>
             <span class="option-text">${opt}</span>
           </label>
@@ -846,7 +846,8 @@
   `;
   form.appendChild(finalCard);
 
-  window.selectOption = function(qId, optIdx, isCheckbox) {
+  window.selectOption = function(event, qId, optIdx, isCheckbox) {
+    event.preventDefault();
     const opts = document.querySelectorAll(`#opts-${qId} .option`);
     if (!isCheckbox) {
       opts.forEach(o => o.classList.remove('selected'));
