@@ -1,0 +1,932 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Анкета Сўровнома — ИИВ Академияси</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #0a1628;
+    --navy2: #112040;
+    --gold: #c9a227;
+    --gold2: #e8ba30;
+    --cream: #f5f0e8;
+    --white: #ffffff;
+    --text: #1a2540;
+    --muted: #6b7a99;
+    --border: #ddd8cc;
+    --success: #1a8a5e;
+    --card: rgba(255,255,255,0.97);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'IBM Plex Sans', sans-serif;
+    background: var(--navy);
+    min-height: 100vh;
+    color: var(--text);
+  }
+
+  /* Background pattern */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse at 20% 0%, rgba(201,162,39,0.12) 0%, transparent 50%),
+      radial-gradient(ellipse at 80% 100%, rgba(201,162,39,0.08) 0%, transparent 50%),
+      linear-gradient(160deg, #0a1628 0%, #0d1e38 50%, #0a1628 100%);
+    z-index: 0;
+  }
+
+  /* Decorative grid lines */
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(201,162,39,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(201,162,39,0.04) 1px, transparent 1px);
+    background-size: 60px 60px;
+    z-index: 0;
+  }
+
+  .container {
+    position: relative;
+    z-index: 1;
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 40px 20px 80px;
+  }
+
+  /* Header */
+  .header {
+    text-align: center;
+    margin-bottom: 48px;
+    animation: fadeDown 0.8s ease both;
+  }
+
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(201,162,39,0.15);
+    border: 1px solid rgba(201,162,39,0.3);
+    color: var(--gold2);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 6px 16px;
+    border-radius: 20px;
+    margin-bottom: 20px;
+  }
+
+  .badge::before { content: '◆'; font-size: 8px; }
+
+  h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(22px, 4vw, 32px);
+    color: var(--white);
+    line-height: 1.3;
+    margin-bottom: 8px;
+  }
+
+  .subtitle {
+    color: rgba(255,255,255,0.5);
+    font-size: 13px;
+    font-weight: 300;
+    letter-spacing: 0.5px;
+  }
+
+  .divider {
+    width: 60px;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    margin: 20px auto;
+  }
+
+  /* Intro card */
+  .intro-card {
+    background: var(--card);
+    border-radius: 16px;
+    padding: 28px 32px;
+    margin-bottom: 32px;
+    border-left: 4px solid var(--gold);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    animation: fadeUp 0.8s 0.2s ease both;
+  }
+
+  .intro-card p {
+    font-size: 14px;
+    line-height: 1.8;
+    color: #334;
+    margin-bottom: 16px;
+  }
+
+  .intro-card p:last-child { margin-bottom: 0; }
+
+  .intro-card strong {
+    color: var(--navy);
+    font-weight: 600;
+  }
+
+  .rules {
+    background: #f8f6f0;
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin-top: 16px;
+  }
+
+  .rules p {
+    font-size: 13px;
+    color: #556;
+    margin-bottom: 8px;
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+  }
+
+  .rules p:last-child { margin-bottom: 0; }
+
+  .rules .num {
+    background: var(--navy);
+    color: var(--gold);
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 700;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  /* Progress */
+  .progress-wrap {
+    background: rgba(255,255,255,0.08);
+    border-radius: 12px;
+    padding: 16px 20px;
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    animation: fadeUp 0.8s 0.3s ease both;
+  }
+
+  .progress-label {
+    color: rgba(255,255,255,0.7);
+    font-size: 13px;
+    white-space: nowrap;
+  }
+
+  .progress-bar {
+    flex: 1;
+    height: 6px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--gold), var(--gold2));
+    border-radius: 3px;
+    transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    width: 0%;
+  }
+
+  .progress-pct {
+    color: var(--gold);
+    font-size: 14px;
+    font-weight: 600;
+    min-width: 36px;
+    text-align: right;
+  }
+
+  /* Question card */
+  .question-card {
+    background: var(--card);
+    border-radius: 16px;
+    padding: 28px 32px;
+    margin-bottom: 20px;
+    box-shadow: 0 8px 40px rgba(0,0,0,0.2);
+    transition: box-shadow 0.3s;
+    animation: fadeUp 0.5s ease both;
+    border-top: 3px solid transparent;
+  }
+
+  .question-card.answered {
+    border-top-color: var(--gold);
+  }
+
+  .question-card:hover {
+    box-shadow: 0 12px 50px rgba(0,0,0,0.25);
+  }
+
+  .q-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    margin-bottom: 20px;
+  }
+
+  .q-num {
+    background: var(--navy);
+    color: var(--gold);
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    font-weight: 700;
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    letter-spacing: -1px;
+  }
+
+  .q-text {
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--text);
+    line-height: 1.6;
+    padding-top: 4px;
+  }
+
+  /* Options */
+  .options {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-left: 60px;
+  }
+
+  .option {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    border-radius: 10px;
+    border: 1.5px solid var(--border);
+    cursor: pointer;
+    transition: all 0.2s;
+    background: #fafaf8;
+  }
+
+  .option:hover {
+    border-color: var(--gold);
+    background: rgba(201,162,39,0.04);
+    transform: translateX(3px);
+  }
+
+  .option.selected {
+    border-color: var(--gold);
+    background: rgba(201,162,39,0.08);
+  }
+
+  .option input[type="radio"],
+  .option input[type="checkbox"] {
+    display: none;
+  }
+
+  .radio-dot {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 2px solid #ccc;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+  }
+
+  .option.selected .radio-dot {
+    border-color: var(--gold);
+    background: var(--gold);
+  }
+
+  .radio-dot::after {
+    content: '';
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: white;
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+
+  .option.selected .radio-dot::after { opacity: 1; }
+
+  .check-box {
+    width: 20px;
+    height: 20px;
+    border-radius: 5px;
+    border: 2px solid #ccc;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+    font-size: 12px;
+    color: transparent;
+  }
+
+  .option.selected .check-box {
+    border-color: var(--gold);
+    background: var(--gold);
+    color: white;
+  }
+
+  .option-text {
+    font-size: 13.5px;
+    color: #334;
+    line-height: 1.5;
+  }
+
+  .option.selected .option-text {
+    color: var(--navy);
+    font-weight: 500;
+  }
+
+  /* Text area for open answers */
+  .open-answer {
+    margin-left: 60px;
+    margin-top: 10px;
+  }
+
+  .open-answer textarea {
+    width: 100%;
+    padding: 12px 16px;
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 13.5px;
+    color: var(--text);
+    background: #fafaf8;
+    resize: vertical;
+    min-height: 80px;
+    transition: border-color 0.2s;
+    outline: none;
+  }
+
+  .open-answer textarea:focus {
+    border-color: var(--gold);
+    background: white;
+  }
+
+  /* Submit section */
+  .submit-section {
+    text-align: center;
+    margin-top: 36px;
+    animation: fadeUp 0.8s 0.5s ease both;
+  }
+
+  .btn-submit {
+    background: linear-gradient(135deg, var(--gold), var(--gold2));
+    color: var(--navy);
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    border: none;
+    padding: 16px 48px;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s;
+    box-shadow: 0 8px 30px rgba(201,162,39,0.4);
+  }
+
+  .btn-submit:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 40px rgba(201,162,39,0.5);
+  }
+
+  .btn-submit:active { transform: translateY(0); }
+
+  .btn-submit:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+  }
+
+  .submit-note {
+    margin-top: 12px;
+    color: rgba(255,255,255,0.4);
+    font-size: 12px;
+  }
+
+  /* Success state */
+  .success-screen {
+    display: none;
+    text-align: center;
+    padding: 60px 20px;
+    animation: fadeUp 0.8s ease both;
+  }
+
+  .success-icon {
+    width: 80px;
+    height: 80px;
+    background: linear-gradient(135deg, var(--gold), var(--gold2));
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 24px;
+    font-size: 36px;
+    box-shadow: 0 20px 50px rgba(201,162,39,0.4);
+  }
+
+  .success-screen h2 {
+    font-family: 'Playfair Display', serif;
+    color: var(--white);
+    font-size: 28px;
+    margin-bottom: 12px;
+  }
+
+  .success-screen p {
+    color: rgba(255,255,255,0.6);
+    font-size: 15px;
+    line-height: 1.7;
+  }
+
+  /* Error */
+  .error-msg {
+    background: rgba(220,50,50,0.1);
+    border: 1px solid rgba(220,50,50,0.3);
+    color: #e05;
+    padding: 12px 20px;
+    border-radius: 10px;
+    font-size: 13px;
+    margin-top: 16px;
+    display: none;
+  }
+
+  .unanswered { border-top-color: #e05 !important; animation: shake 0.4s ease; }
+
+  @keyframes shake {
+    0%,100% { transform: translateX(0); }
+    25% { transform: translateX(-6px); }
+    75% { transform: translateX(6px); }
+  }
+
+  @keyframes fadeDown {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .loading-spinner {
+    display: inline-block;
+    width: 18px;
+    height: 18px;
+    border: 2px solid rgba(10,22,40,0.3);
+    border-top-color: var(--navy);
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+    margin-right: 8px;
+    vertical-align: middle;
+  }
+
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  @media (max-width: 600px) {
+    .options { margin-left: 0; }
+    .open-answer { margin-left: 0; }
+    .question-card { padding: 20px; }
+    .intro-card { padding: 20px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <div class="header">
+    <div class="badge">ИИВ Академияси · Тошкент 2026</div>
+    <h1>Ички ишлар органларининг<br>ахборот-таҳлилий фаолиятига доир<br>муаммолар ва уларнинг ечимлари</h1>
+    <div class="divider"></div>
+    <p class="subtitle">Мутахассисларнинг фикрларини ўрганиш учун анкета сўровнома</p>
+  </div>
+
+  <!-- Form section -->
+  <div id="formSection">
+    <div class="intro-card">
+      <p><strong>Ҳурматли мутахассис!</strong></p>
+      <p>Ўзбекистон Республикаси ИИВ Академиясида «Ички ишлар органларида ахборот-таҳлилий фаолиятни такомиллаштириш» мавзусида тадқиқот олиб борилмоқда. Жавобларингиз умумлаштирилади ва муаммоларни аниқлашда фойдаланилади.</p>
+      <div class="rules">
+        <p><span class="num">1</span><span>Ҳар бир савол ва жавоб вариантлари билан чуқур танишиб чиқинг</span></p>
+        <p><span class="num">2</span><span>Фикрингизга мос жавобни белгиланг; бир нечта мос жавоб бўлса ҳаммасини белгиланг</span></p>
+        <p><span class="num">3</span><span>Мос жавоб йўқ бўлса, ўз фикрингизни ёзиб кўрсатинг</span></p>
+        <p><span class="num">4</span><span>Анкета аноним тарзда ўтказилади — биографик маълумот ва имзо шарт эмас</span></p>
+      </div>
+    </div>
+
+    <div class="progress-wrap">
+      <span class="progress-label">Жавоб берилди:</span>
+      <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+      <span class="progress-pct" id="progressPct">0%</span>
+    </div>
+
+    <form id="surveyForm"></form>
+
+    <div class="submit-section">
+      <div class="error-msg" id="errorMsg">⚠ Илтимос, барча саволларга жавоб беринг!</div>
+      <button class="btn-submit" id="submitBtn" onclick="submitSurvey()">
+        Жавобларни юбориш
+      </button>
+      <p class="submit-note">🔒 Маълумотларингиз хавфсизлик билан сақланади</p>
+    </div>
+  </div>
+
+  <!-- Success screen -->
+  <div class="success-screen" id="successScreen">
+    <div class="success-icon">✓</div>
+    <h2>Раҳмат!</h2>
+    <p>Сизнинг жавобларингиз муваффақиятли қабул қилинди.<br>Тадқиқотда иштирок этганингиз учун самимий миннатдорчилигимизни билдирамиз!</p>
+  </div>
+</div>
+
+<script>
+  const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzPyEKLPHrs3dOYGZZXfTJ9PM0lIXOkkKpRVBQ6S_vtOYQLMTvzfxR-HzJRithgd3Rr/exec";
+
+  // ===== SAVOLLAR =====
+  const questions = [
+    {
+      id: 1,
+      text: "Сизнингча, Ички ишлар органларида ахборот-таҳлилий фаолиятнинг асосий вазифалари нимадан иборат?",
+      type: "radio",
+      options: [
+        "Ахборот тўплаш ва тизимлаштириш, таҳлил қилиш, истиқболини белгилаш ва шу орқали бошқарув қарорларини қабул қилиш",
+        "Ҳужжатларни таҳлил қилиш ва прогнозлаштириш орқали янги бошқарув қарорларини қабул қилиш учун таҳлилий маълумотнома тайёрлаш",
+        "Бошқарув қарорларини қабул қилиш учун маълумот тайёрлаш ва юқори турувчи органларга тақдим этиш",
+        "Саволга жавоб беришга қийналаман"
+      ]
+    },
+    {
+      id: 2,
+      text: "Сизнингча, Ахборот-тахлилий фаолиятдаги асосий муаммолар нималардан иборат?",
+      type: "checkbox",
+      options: [
+        "Ахборот ва маълумотларнинг eтишмаслиги",
+        "Таҳлилий жараёнларни автоматлаштирилмаганлиги ёки пастлиги",
+        "Малакали кадрларнинг eтишмаслиги",
+        "Раҳбариятнинг ахборот-таҳлилий фаолият натижаси билан қизиқмаслиги",
+        "Ахборот-таҳлилий ҳужжатларга талаб йўқлиги",
+        "Бошқа фикрларингиз бўлса баён қилинг"
+      ]
+    },
+    {
+      id: 3,
+      text: "Ички ишлар органларида ахборот-таҳлилий фаолиятнинг бугунги ҳолатини қандай баҳолайсиз?",
+      type: "radio",
+      options: [
+        "Тизимда ахборот-таҳлилий фаолиятининг аниқ механизмлар мавжуд",
+        "Тизимда ахборот-таҳлилий фаолият механизми аниқ эмас",
+        "Тизимда ахборот-таҳлилий фаолият механизмлари eтарли эмас",
+        "Тизимда ахборот-таҳлилий фаолият механизмлари умуман йўқ",
+        "Бошқа фикрлар"
+      ]
+    },
+    {
+      id: 4,
+      text: "Ички ишлар органларида ахборот-таҳлилий фаолиятнинг ташкил этилиш ҳолатини қандай баҳолайсиз?",
+      type: "radio",
+      options: [
+        "Тизимда ахборот-таҳлилий фаолият юқори даражада ташкил этилган",
+        "Тизимда ахборот-таҳлилий фаолият ўрта даражада ташкил этилган",
+        "Тизимда ахборот-таҳлилий фаолият қониқарсиз даражада ташкил этилган",
+        "Саволга жавоб беришга қийналаман"
+      ]
+    },
+    {
+      id: 5,
+      text: "Сизнингча, ички ишлар органларида ахборот-таҳлилий фаолият соҳасида энг кўп юзага келаётган муаммолар нимадан иборат?",
+      type: "checkbox",
+      options: [
+        "Ахборот-таҳлилий фаолият соҳасидаги мавжуд норматив-ҳуқуқий ҳужжатлар билан боғлиқ муаммолар",
+        "Ички ишлар органларида ахборот-таҳлилий фаолиятга нисбатан талабнинг камлиги билан боғлиқ муаммолар",
+        "Ахборот-таҳлилий фаолиятни моддий-техник таъминлаш ва ахборот-коммуникация технологияларни жорий этишдаги муаммолар",
+        "Ахборот-таҳлилий фаолият билан шуғулланувчи ходимларнинг билим малакаси билан боғлиқ муаммолар",
+        "Ахборот-таҳлилий фаолият соҳасини кадрлар билан таъминлашдаги муаммолар",
+        "Бошқа фикрлар"
+      ]
+    },
+    {
+      id: 6,
+      text: "Сиз жойлардаги ички ишлар органлари ходимларининг ахборот-таҳлилий фаолиятдан хабардорлигини қандай баҳолайсиз?",
+      type: "radio",
+      options: [
+        "Умуман хабардор эмас",
+        "Қисман хабардор",
+        "Хабардор"
+      ]
+    },
+    {
+      id: 7,
+      text: "Сизнингча, жойлардаги ички ишлар органлари ходимларининг ахборот-таҳлилий фаолиятдан хабардор эмаслиги ёки қисман хабардорлигининг сабаби нимада?",
+      type: "checkbox",
+      options: [
+        "Ходимлар ахборот-таҳлилий фаолият билан тўғридан-тўғри ишласликлари",
+        "Ходимларда ахборот-таҳлилий фаолият борасидаги тушинчалар eтарли эмаслиги",
+        "Амалиётда ходимлардан таҳлилий маълумотлар талаб қилинмаслиги",
+        "Бошқа фикрлар"
+      ]
+    },
+    {
+      id: 8,
+      text: "Ахборот-таҳлилий фаолиятни такомиллаштириш учун қандай чора-тадбирларни амалга ошириш зарур деб ҳисоблайсиз?",
+      type: "checkbox",
+      options: [
+        "Ахборот-таҳлилий фаолиятга оид норматив-ҳуқуқий базани такомиллаштириш",
+        "Ахборот-таҳлилий фаолиятга оид амалий кўникмаларни ривожлантириш бўйича машғулотлар ташкил этиш",
+        "Ахборот-таҳлилий фаолиятни автоматлаштириш ва рақамлаштириш",
+        "Ахборот-таҳлилий фаолият билан шуғулланувчи ходимлар малакасини ошириш",
+        "Бошқа чора-тадбирлар"
+      ]
+    },
+    {
+      id: 9,
+      text: "Ахборот-таҳлилий ҳужжатларни тайёрлашда асосан қандай усуллардан фойдаланилади?",
+      type: "checkbox",
+      options: [
+        "Статистик маълумотларни таҳлил қилиш",
+        "Қиёсий таҳлил",
+        "Мониторинг",
+        "Прогнозлаштириш",
+        "Бошқа усуллар"
+      ]
+    },
+    {
+      id: 10,
+      text: "Ахборот-таҳлилий маълумотлар асосида бошқарув қарорлари қабул қилинадими?",
+      type: "radio",
+      options: [
+        "Ҳа, доимо",
+        "Баъзида",
+        "Камдан-кам",
+        "Йўқ, умуман қабул қилинмайди",
+        "Саволга жавоб беришга қийналаман"
+      ]
+    },
+    {
+      id: 11,
+      text: "Ахборот-таҳлилий фаолиятни такомиллаштиришда замонавий ахборот технологияларидан фойдаланиш даражасини қандай баҳолайсиз?",
+      type: "radio",
+      options: [
+        "Юқори даражада фойдаланилади",
+        "Ўрта даражада фойдаланилади",
+        "Паст даражада фойдаланилади",
+        "Умуман фойдаланилмайди",
+        "Саволга жавоб беришга қийналаман"
+      ]
+    },
+    {
+      id: 12,
+      text: "Ахборот-таҳлилий фаолиятни ривожлантиришда кадрлар малакасини ошириш зарурми?",
+      type: "radio",
+      options: [
+        "Ҳа, жуда зарур",
+        "Зарур, аммо иккинчи даражали",
+        "Унчалик зарур эмас",
+        "Зарур эмас",
+        "Саволга жавоб беришга қийналаман"
+      ]
+    },
+    {
+      id: 13,
+      text: "Ахборот-таҳлилий ҳужжатлар тайёрланишида ходимлар қанчалик фаол иштирок этади?",
+      type: "radio",
+      options: [
+        "Барча ходимлар фаол иштирок этади",
+        "Айрим ходимлар иштирок этади",
+        "Фақат муайян мутахассислар иштирок этади",
+        "Иштирок этмайди",
+        "Саволга жавоб беришга қийналаман"
+      ]
+    },
+    {
+      id: 14,
+      text: "Ахборот-таҳлилий фаолиятда меъёрий-ҳуқуқий базанинг ҳолати қандай?",
+      type: "radio",
+      options: [
+        "Мукаммал ва eтарли",
+        "Мавжуд, аммо такомиллаштириш зарур",
+        "Этарли эмас",
+        "Умуман мавжуд эмас",
+        "Саволга жавоб беришга қийналаман"
+      ]
+    },
+    {
+      id: 15,
+      text: "Ахборот-таҳлилий фаолиятда раҳбарият томонидан қандай эътибор берилади?",
+      type: "radio",
+      options: [
+        "Юқори даражада эътибор берилади",
+        "Ўрта даражада эътибор берилади",
+        "Eтарли эмас",
+        "Умуман эътибор берилмайди",
+        "Саволга жавоб беришга қийналаман"
+      ]
+    },
+    {
+      id: 16,
+      text: "Ахборот-таҳлилий фаолиятни такомиллаштиришга қаратилган илмий тадқиқотлар зарурми?",
+      type: "radio",
+      options: [
+        "Ҳа, жуда зарур",
+        "Зарур",
+        "Унчалик зарур эмас",
+        "Зарур эмас",
+        "Саволга жавоб беришга қийналаман"
+      ]
+    },
+    {
+      id: 17,
+      text: "Ахборот-таҳлилий фаолиятда халқаро тажрибадан фойдаланиш мақсадга мувофиқми?",
+      type: "radio",
+      options: [
+        "Ҳа, фойдаланиш керак",
+        "Айрим элементларини жорий eтиш мумкин",
+        "Зарур эмас",
+        "Саволга жавоб беришга қийналаман"
+      ]
+    },
+    {
+      id: 18,
+      text: "Ахборот-таҳлилий фаолиятда ходимлар учун қўшимча рағбатлантириш тизими жорий этилиши зарурми?",
+      type: "radio",
+      options: [
+        "Ҳа, жуда зарур",
+        "Зарур",
+        "Унчалик зарур эмас",
+        "Зарур эмас",
+        "Саволга жавоб беришга қийналаман"
+      ]
+    },
+    {
+      id: 19,
+      text: "Ички ишлар органларида ахборот-таҳлилий фаолиятнинг тамойиллари, ахборот-таҳлилий фаолиятнинг асосий ва ички ишлар органлари олдига қўйилган вазифаларни бажаришда фойдаланилган услублари, Ахборотни баҳолашнинг асосий мезонлари, ахборот-таҳлилий ҳужжатнинг таснифлари ва уни расмийлаштириш мезонларини қатъий белгилаш таклифига муносабатингиз?",
+      type: "radio",
+      options: [
+        "Маъқуллайман",
+        "Қаршиман",
+        "Саволга жавоб беришга қийналаман"
+      ]
+    },
+    {
+      id: 20,
+      text: "Ички ишлар органларида ахборот-таҳлилий фаолият билан шуғулланувчи соҳавий хизматлар ва тузилмалар ходимларига уларнинг ҳар чорак амалга оширилган (юқори органга реализация қилинган) ва бошқарув қарорлари ишлаб чиқилишига асос бўлган таҳлилий ҳужжатлари орқали KPI тизимини жорий этиб, уларнинг рейтингини ишлаб чиқиш ва шу орқали раҳбатлантириш чораларини жорий этиш таклифига қандай қарайсиз?",
+      type: "radio",
+      options: [
+        "Маъқуллайман, бу ички ишлар органларининг таҳлилий фаолият билан шуғулланувчи ходимларига ишга масъулият билан ёндашиш, ўз устига ишлаш учун қўшимча мотивация беради",
+        "Йўқ, бунга зарурат мавжуд эмас",
+        "Бошқа фикрлар"
+      ]
+    }
+  ];
+
+  // Build form
+  const form = document.getElementById('surveyForm');
+  let answered = new Set();
+
+  questions.forEach((q, qi) => {
+    const delay = Math.min(qi * 0.05, 0.8);
+    const card = document.createElement('div');
+    card.className = 'question-card';
+    card.id = `q-${q.id}`;
+    card.style.animationDelay = `${0.4 + delay}s`;
+
+    const isCheckbox = q.type === 'checkbox';
+
+    card.innerHTML = `
+      <div class="q-header">
+        <div class="q-num">${q.id}</div>
+        <div class="q-text">${q.text}</div>
+      </div>
+      <div class="options" id="opts-${q.id}">
+        ${q.options.map((opt, i) => `
+          <label class="option" id="opt-${q.id}-${i}" onclick="selectOption(event, ${q.id}, ${i}, ${isCheckbox})">
+            <input type="${q.type}" name="q${q.id}" value="${i}" style="display:none">
+            <div class="${isCheckbox ? 'check-box' : 'radio-dot'}">${isCheckbox ? '✓' : ''}</div>
+            <span class="option-text">${opt}</span>
+          </label>
+        `).join('')}
+      </div>
+      ${q.id === 2 || q.id === 5 || q.id === 7 || q.id === 8 || q.id === 9 ? `
+        <div class="open-answer">
+          <textarea placeholder="Бошқа фикрларингиз бўлса ёзинг..." id="open-${q.id}"></textarea>
+        </div>` : ''}
+    `;
+
+    form.appendChild(card);
+  });
+
+  // Also add final open question
+  const finalCard = document.createElement('div');
+  finalCard.className = 'question-card';
+  finalCard.style.animationDelay = '1.5s';
+  finalCard.innerHTML = `
+    <div class="q-header">
+      <div class="q-num">+</div>
+      <div class="q-text">Ички ишлар органларида ахборот-таҳлилий фаолиятига оид мавжуд муаммоларининг ечимлари бўйича қўшимча таклиф, тавсия ва фикр-мулоҳазаларингиз?</div>
+    </div>
+    <div class="open-answer" style="margin-left:0">
+      <textarea id="finalComment" placeholder="Қўшимча фикр ва тавсияларингизни ёзинг..." style="min-height:120px"></textarea>
+    </div>
+  `;
+  form.appendChild(finalCard);
+
+  window.selectOption = function(event, qId, optIdx, isCheckbox) {
+    event.preventDefault();
+    const opts = document.querySelectorAll(`#opts-${qId} .option`);
+    if (!isCheckbox) {
+      opts.forEach(o => o.classList.remove('selected'));
+      opts[optIdx].classList.add('selected');
+      answered.add(qId);
+    } else {
+      opts[optIdx].classList.toggle('selected');
+      const anySelected = [...opts].some(o => o.classList.contains('selected'));
+      if (anySelected) answered.add(qId); else answered.delete(qId);
+    }
+    document.getElementById(`q-${qId}`).classList.remove('unanswered');
+    document.getElementById(`q-${qId}`).classList.add('answered');
+    updateProgress();
+  };
+
+  function updateProgress() {
+    const pct = Math.round((answered.size / questions.length) * 100);
+    document.getElementById('progressFill').style.width = pct + '%';
+    document.getElementById('progressPct').textContent = pct + '%';
+  }
+
+  window.submitSurvey = async function() {
+    // Validate
+    const unanswered = questions.filter(q => !answered.has(q.id));
+    if (unanswered.length > 0) {
+      unanswered.forEach(q => {
+        const card = document.getElementById(`q-${q.id}`);
+        card.classList.add('unanswered');
+        setTimeout(() => card.classList.remove('unanswered'), 1000);
+      });
+      const errEl = document.getElementById('errorMsg');
+      errEl.style.display = 'block';
+      document.getElementById(`q-${unanswered[0].id}`).scrollIntoView({ behavior: 'smooth', block: 'center' });
+      return;
+    }
+
+    const btn = document.getElementById('submitBtn');
+    btn.disabled = true;
+    btn.innerHTML = '<span class="loading-spinner"></span>Юборилмоқда...';
+
+    // Collect answers
+    const answers = {};
+    questions.forEach(q => {
+      const isCheckbox = q.type === 'checkbox';
+      if (isCheckbox) {
+        const selected = [...document.querySelectorAll(`#opts-${q.id} .option.selected`)].map(o =>
+          q.options[[...document.querySelectorAll(`#opts-${q.id} .option`)].indexOf(o)]
+        );
+        answers[`s${q.id}`] = selected;
+      } else {
+        const sel = document.querySelector(`#opts-${q.id} .option.selected`);
+        answers[`s${q.id}`] = sel ? q.options[[...document.querySelectorAll(`#opts-${q.id} .option`)].indexOf(sel)] : '';
+      }
+      const openEl = document.getElementById(`open-${q.id}`);
+      if (openEl && openEl.value.trim()) answers[`open_${q.id}`] = openEl.value.trim();
+    });
+
+    const finalComment = document.getElementById('finalComment').value.trim();
+    if (finalComment) answers.finalComment = finalComment;
+
+    try {
+      await fetch(APPS_SCRIPT_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ...answers, userAgent: navigator.userAgent })
+      });
+
+      document.getElementById('formSection').style.display = 'none';
+      const success = document.getElementById('successScreen');
+      success.style.display = 'block';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } catch (err) {
+      console.error(err);
+      btn.disabled = false;
+      btn.innerHTML = 'Жавобларни юбориш';
+      alert('Хатолик юз берди. Интернет алоқасини текшириб, қайта уриниб кўринг.');
+    }
+  };
+</script>
+</body>
+</html>
